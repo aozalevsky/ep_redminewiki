@@ -1,9 +1,9 @@
 var path = require('path');
 var eejs = require("ep_etherpad-lite/node/eejs");
-var exportLatex = require('./ExportLatex');
+var exportLatex = require('./ExportRedmineWiki');
 
 exports.expressCreateServer = function (hook_name, args, cb) {
-	args.app.get('/p/:pad/:rev?/export/latex', function(req, res, next) {
+	args.app.get('/p/:pad/:rev?/export/redminewiki', function(req, res, next) {
 		var padID = req.params.pad;
 		var revision = req.params.rev ? req.params.rev : null;
 
@@ -15,16 +15,16 @@ exports.expressCreateServer = function (hook_name, args, cb) {
 };
 
 exports.eejsBlock_exportColumn = function(hook_name, args, cb) {
-	args.content = args.content + eejs.require("ep_latexexport/templates/exportcolumn.html", {}, module);
+	args.content = args.content + eejs.require("ep_redminewiki/templates/exportcolumn.html", {}, module);
 	return cb();
 };
 
 exports.eejsBlock_scripts = function (hook_name, args, cb) {
-	args.content = args.content + eejs.require("ep_latexexport/templates/scripts.html", {}, module);
+	args.content = args.content + eejs.require("ep_redminewiki/templates/scripts.html", {}, module);
 	return cb();
 };
 
 exports.eejsBlock_styles = function (hook_name, args, cb) {
-	args.content = args.content + eejs.require("ep_latexexport/templates/styles.html", {}, module);
+	args.content = args.content + eejs.require("ep_redminewiki/templates/styles.html", {}, module);
 	return cb();
 };
