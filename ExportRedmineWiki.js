@@ -68,7 +68,7 @@ function getLatexFromAtext(pad, atext)
   var textLines = atext.text.slice(0, -1).split('\n');
   var attribLines = Changeset.splitAttributionLines(atext.attribs, atext.text);
 
-  var tags = ['textbf', 'textit', 'underline', 'sout'];
+  var tags = ['*', '_', '+', '-'];
   var props = ['bold', 'italic', 'underline', 'strikethrough'];
   var anumMap = {};
 
@@ -81,7 +81,7 @@ function getLatexFromAtext(pad, atext)
     }
   });
 
-  var headingtags = ['section', 'subsection', 'subsubsection', 'paragraph', 'subparagraph', 'subparagraph'];
+  var headingtags = ['h1. ', 'h2. ', 'h3. ', 'h4. ', 'h5. ', 'h6. '];
   var headingprops = [['heading', 'h1'], ['heading', 'h2'], ['heading', 'h3'], ['heading', 'h4'], ['heading', 'h5'], ['heading', 'h6']];
   var headinganumMap = {};
 
@@ -122,15 +122,13 @@ function getLatexFromAtext(pad, atext)
     function emitOpenTag(i)
     {
       openTags.unshift(i);
-      assem.append('\\');
       assem.append(tags[i]);
-      assem.append('{');
     }
 
     function emitCloseTag(i)
     {
       openTags.shift();
-      assem.append('}');
+      assem.append(tags[i]);
     }
     
     function orderdCloseTags(tags2close)
@@ -168,7 +166,7 @@ function getLatexFromAtext(pad, atext)
     }
 
     if (heading) {
-      assem.append('\\'+heading+'{');
+      assem.append(heading+'\n');
     }
 
     var urls = _findURLs(text);
@@ -314,22 +312,17 @@ function getLatexFromAtext(pad, atext)
         var url = urlData[1];
         var urlLength = url.length;
         processNextChars(startIndex - idx);
-        assem.append('\\url{');
         processNextChars(urlLength);
-        assem.append('}');
       });
     }
 
     processNextChars(text.length - idx);
 
     if (heading) {
-      assem.append('}');
     }
 
     // replace &, _
     assem = assem.toString();
-    assem = assem.replace(/\&/g, '\\&');
-    assem = assem.replace(/\_/g, '\\_'); // this breaks latex math mode: $\sum_i^j$ becomes $\sum\_i^j$
 
     return assem;
   } // end getLineLatex
@@ -369,11 +362,11 @@ function getLatexFromAtext(pad, atext)
         lists.push([line.listLevel, line.listTypeName]);
         if(line.listTypeName == "number")
         {
-          pieces.push("\n"+(new Array((line.listLevel-1)*4)).join(' ')+"\\begin{enumerate} \n"+(new Array(line.listLevel*4)).join(' ')+"\\item ", lineContent || "\n");
+          pieces.push("\n"+(new Array((line.listLevel-1)*4)).join(' ')+(new Array(line.listLevel*4)).join(' ')+"# ", lineContent || "\n");
         }
         else
         {
-          pieces.push("\n"+(new Array((line.listLevel-1)*4)).join(' ')+"\\begin{itemize} \n"+(new Array(line.listLevel*4)).join(' ')+"\\item ", lineContent || "\n");
+          pieces.push("\n"+(new Array((line.listLevel-1)*4)).join(' ')+(new Array(line.listLevel*4)).join(' ')+"* ", lineContent || "\n");
         }
       }
       //the following code *seems* dead after my patch.
@@ -407,15 +400,15 @@ function getLatexFromAtext(pad, atext)
         {
           if(lists[lists.length - 1][1] == "number")
           {
-            pieces.push("\n"+(new Array((line.listLevel-1)*4)).join(' ')+"\\end{enumerate}");
+            pieces.push("\n"+(new Array((line.listLevel-1)*4)).join(' '));
           }
           else
           {
-            pieces.push("\n"+(new Array((line.listLevel-1)*4)).join(' ')+"\\end{itemize}");
+            pieces.push("\n"+(new Array((line.listLevel-1)*4)).join(' '));
           }
           lists.length--;
         }
-        pieces.push("\n"+(new Array(line.listLevel*4)).join(' ')+"\\item ", lineContent || "\n");
+        pieces.push("\n"+(new Array(line.listLevel*4)).join(' ')+"* ", lineContent || "\n");
       }
     }
     else//outside any list
@@ -424,11 +417,11 @@ function getLatexFromAtext(pad, atext)
       {
         if(lists[lists.length - 1][1] == "number")
         {
-          pieces.push("\n"+(new Array((lists.length-1)*4)).join(' ')+"\\end{enumerate}\n");
+          pieces.push("\n"+(new Array((lists.length-1)*4)).join(' ')+"\n");
         }
         else
         {
-          pieces.push("\n"+(new Array((lists.length-1)*4)).join(' ')+"\\end{itemize}\n");
+          pieces.push("\n"+(new Array((lists.length-1)*4)).join(' ')+"\n");
         }
         lists.length--;
       }      
@@ -440,11 +433,11 @@ function getLatexFromAtext(pad, atext)
   {
     if(lists[k][1] == "number")
     {
-      pieces.push("\n\\end{enumeratex}\n");
+      pieces.push("\n");
     }
     else
     {
-      pieces.push("\n\\end{itemizex}\n");
+      pieces.push("\n");
     }
   }
 
