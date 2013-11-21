@@ -286,7 +286,6 @@ function getLatexFromAtext(pad, atext)
         if (heading && !deletedAsterisk) {
           s = s.substring(1);
           deletedAsterisk = true;
-          s = s + '\n';
         }
         
         assem.append(s);
@@ -320,6 +319,7 @@ function getLatexFromAtext(pad, atext)
     processNextChars(text.length - idx);
 
     if (heading) {
+      s = s + '\n';
     }
 
     // replace &, _
