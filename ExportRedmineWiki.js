@@ -288,7 +288,7 @@ function getLatexFromAtext(pad, atext)
           deletedAsterisk = true;
         }
         
-        assem.append(s);
+        assem.append(s + '\n');
       } // end iteration over spans in line
       
       var tags2close = [];
