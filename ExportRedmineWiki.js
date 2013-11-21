@@ -166,7 +166,7 @@ function getLatexFromAtext(pad, atext)
     }
 
     if (heading) {
-      assem.append(heading+'\n');
+      assem.append(heading);
     }
 
     var urls = _findURLs(text);
