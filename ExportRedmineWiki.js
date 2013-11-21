@@ -408,7 +408,7 @@ function getLatexFromAtext(pad, atext)
           }
           lists.length--;
         }
-        pieces.push("\n"+(new Array(line.listLevel*4)).join(' ')+"* ", lineContent || "\n");
+        pieces.push("\n"+(new Array(line.listLevel*4)).join(' ')+"# ", lineContent || "\n");
       }
     }
     else//outside any list
