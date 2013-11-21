@@ -286,9 +286,10 @@ function getLatexFromAtext(pad, atext)
         if (heading && !deletedAsterisk) {
           s = s.substring(1);
           deletedAsterisk = true;
+          s = s + '\n';
         }
         
-        assem.append(s + '\n');
+        assem.append(s);
       } // end iteration over spans in line
       
       var tags2close = [];
