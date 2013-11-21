@@ -408,7 +408,14 @@ function getLatexFromAtext(pad, atext)
           }
           lists.length--;
         }
-        pieces.push("\n"+(new Array(line.listLevel*4)).join(' ')+"# ", lineContent || "\n");
+        if(lists[lists.length - 1][1] == "number")
+          {
+            pieces.push("\n"+(new Array(line.listLevel*4)).join(' ')+"# ", lineContent || "\n");
+          }
+          else
+          {
+            pieces.push("\n"+(new Array(line.listLevel*4)).join(' ')+"* ", lineContent || "\n");
+          }
       }
     }
     else//outside any list
