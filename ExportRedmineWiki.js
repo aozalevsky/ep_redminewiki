@@ -319,7 +319,7 @@ function getLatexFromAtext(pad, atext)
     processNextChars(text.length - idx);
 
     if (heading) {
-      s = s + '\n';
+      assem.append('\n');
     }
 
     // replace &, _
